@@ -1,10 +1,11 @@
 import './App.css'
+import { Input } from './components/ui/input'
 
 function App() {
 
   return (
     <>
-      <h1>Hello World!</h1>
+      <Input placeholder="search..."/>
     </>
   )
 }
