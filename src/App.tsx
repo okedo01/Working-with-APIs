@@ -1,11 +1,11 @@
 import './App.css'
-import { Input } from './components/ui/input'
+import SearchField from './SearchField'
 
 function App() {
 
   return (
     <>
-      <Input placeholder="search..."/>
+      <SearchField />
     </>
   )
 }
