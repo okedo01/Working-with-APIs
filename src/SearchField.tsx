@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type InputEventHandler } from 'react'
+import React, { useEffect, useState } from 'react';
 import type { User } from './Type';
 import {
     Card,
@@ -10,7 +10,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from './components/ui/input';
-
 
 const SearchField: React.FC = () => {
     const [data, setData] = useState<User[]>([]);
