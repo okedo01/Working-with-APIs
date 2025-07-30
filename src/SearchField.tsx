@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, type InputEventHandler } from 'react'
 import type { User } from './Type';
 import {
     Card,
@@ -9,16 +9,22 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { Input } from './components/ui/input';
 
 
 const SearchField: React.FC = () => {
     const [data, setData] = useState<User[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(true);
 
     if (!loading) <div>Loading...</div>
 
     if (!error) <div>Error: {error}</div>
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    }
 
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
@@ -40,21 +46,24 @@ const SearchField: React.FC = () => {
 
     return (
         <div>
-            {data.map(value => (
-                <Card key={value.id}>
-                    <CardHeader>
-                        <CardTitle>{ value.name}</CardTitle>
-                        <CardDescription>{ value.website }</CardDescription>
-                        <CardAction>{ value.company.name }</CardAction>
-                    </CardHeader>
-                    <CardContent>
-                        <p>{ value.email }</p>
-                    </CardContent>
-                    <CardFooter>
-                        <p>{ value.address.city }</p>
-                    </CardFooter>
-                </Card>
-            ))}
+            <Input placeholder="Search..." onChange={(e) => handleSearch(e)} className="mb-5" />
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
+                {data.map(value => (
+                    <Card key={value.id}>
+                        <CardHeader>
+                            <CardTitle>{value.name}</CardTitle>
+                            <CardDescription>{value.website}</CardDescription>
+                            <CardAction>{value.company.name}</CardAction>
+                        </CardHeader>
+                        <CardContent>
+                            <p>{value.email}</p>
+                        </CardContent>
+                        <CardFooter>
+                            <p>{value.address.city}</p>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
         </div>
     )
 }
