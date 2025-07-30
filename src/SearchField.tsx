@@ -15,7 +15,7 @@ const SearchField: React.FC = () => {
     const [data, setData] = useState<User[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     if (!loading) <div>Loading...</div>
 
@@ -45,7 +45,7 @@ const SearchField: React.FC = () => {
 
     return (
         <div>
-            <Input placeholder="Search..." onChange={(e) => handleSearch(e)} className="mb-5" />
+            <Input placeholder="Search..." onChange={handleSearch} value={searchTerm} className="mb-5" />
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
                 {data.map(value => (
                     <Card key={value.id}>
