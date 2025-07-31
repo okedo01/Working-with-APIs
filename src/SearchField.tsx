@@ -39,7 +39,7 @@ const SearchField: React.FC = () => {
             })
             .catch(err => {
                 setError(err.message);
-                
+                setLoading(false);
             })
     }, [])
 
