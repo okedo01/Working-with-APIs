@@ -35,7 +35,6 @@ const SearchField: React.FC = () => {
             })
             .then(data => {
                 setData(data);
-                setLoading(false);
             })
             .catch(err => {
                 setError(err.message);
