@@ -35,12 +35,12 @@ const SearchField: React.FC = () => {
             })
     }, [])
 
-    if (!loading) return <div>Loading...</div>
+    if (loading) return <div>Loading...</div>
 
-    if (!error) return <div>Error: {error}</div>
+    if (error) return <div>Error: {error}</div>
 
     const filteredData = data.filter((item) => (
-        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
     ))
 
     return (
