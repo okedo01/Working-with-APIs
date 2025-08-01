@@ -21,14 +21,6 @@ const SearchField: React.FC = () => {
 
     if (!error) <div>Error: {error}</div>
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    }
-
-    const filteredData = data.filter((item) => (
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ))
-
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => {
@@ -49,9 +41,9 @@ const SearchField: React.FC = () => {
 
     return (
         <div>
-            <Input placeholder="Search..." value={searchTerm} className="mb-5" onChange={(event) => handleSearch(event)}/>
+            <Input placeholder="Search..." value={searchTerm} className="mb-5" />
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
-                {filteredData.map(value => (
+                {data.map(value => (
                     <Card key={value.id}>
                         <CardHeader>
                             <CardTitle>{value.name}</CardTitle>
