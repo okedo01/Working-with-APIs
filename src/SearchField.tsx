@@ -26,7 +26,7 @@ const SearchField: React.FC = () => {
     }
 
     const filteredData = data.filter((item) => (
-        item.name.toLowerCase().includes(searchTerm)
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
     ))
 
     useEffect(() => {
