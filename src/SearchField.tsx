@@ -17,10 +17,6 @@ const SearchField: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    if (!loading) <div>Loading...</div>
-
-    if (!error) <div>Error: {error}</div>
-
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => {
@@ -39,11 +35,19 @@ const SearchField: React.FC = () => {
             })
     }, [])
 
+    if (!loading) return <div>Loading...</div>
+
+    if (!error) return <div>Error: {error}</div>
+
+    const filteredData = data.filter((item) => (
+        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+    ))
+
     return (
         <div>
-            <Input placeholder="Search..." value={searchTerm} className="mb-5" />
+            <Input placeholder="Search..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="mb-5" />
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
-                {data.map(value => (
+                {filteredData.map(value => (
                     <Card key={value.id}>
                         <CardHeader>
                             <CardTitle>{value.name}</CardTitle>
