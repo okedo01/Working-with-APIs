@@ -49,7 +49,11 @@ const SearchField: React.FC = () => {
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
                 {data.map(value => (
                     <Card key={value.id}>
-                        
+                        <CardHeader>
+                            <CardTitle>{value.name}</CardTitle>
+                            <CardDescription>{value.website}</CardDescription>
+                            <CardAction>{value.company.name}</CardAction>
+                        </CardHeader>
                         <CardContent>
                             <p>{value.email}</p>
                         </CardContent>
