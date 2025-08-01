@@ -54,9 +54,7 @@ const SearchField: React.FC = () => {
                             <CardDescription>{value.website}</CardDescription>
                             <CardAction>{value.company.name}</CardAction>
                         </CardHeader>
-                        <CardContent>
-                            <p>{value.email}</p>
-                        </CardContent>
+                       
                         <CardFooter>
                             <p>{value.address.city}</p>
                         </CardFooter>
