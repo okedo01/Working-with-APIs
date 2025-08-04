@@ -21,7 +21,7 @@ const SearchField: React.FC = () => {
         fetch("https://jsonplaceholder.typicode.com/users")
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Failed to fetch");
+                    throw new Error("Failed to Load Resource");
                 }
                 return response.json();
             })
