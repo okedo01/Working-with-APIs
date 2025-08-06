@@ -47,6 +47,7 @@ const SearchField: React.FC = () => {
         <div>
             <Input placeholder="Search..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="mb-5" />
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
+            <p>Typed: {searchTerm}</p>
                 {filteredData.map(value => (
                     <Card key={value.id}>
                         <CardHeader>
