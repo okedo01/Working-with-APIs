@@ -35,17 +35,6 @@ const SearchField: React.FC = () => {
             })
     }, [])
 
-     useEffect(() => {
-        const timer = setTimeout(() => {
-            const results = data.filter((user) =>
-                user.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredData(results);
-        }, 500);
-
-        return () => clearTimeout(timer); // clear on new keystroke
-    }, [searchTerm, data]);
-
     if (loading) return <div>Loading...</div>
 
     if (error) return <div>Error: {error}</div>
