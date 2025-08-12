@@ -15,14 +15,16 @@ function App() {
       })
   })
 
-  const { mutate } = useMutation({mutationFn: (newPost: any) => {
-    fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      body: JSON.stringify(newPost)
-    }).then(res => {
-      res.json();
-    })
-  }})
+  const { mutate } = useMutation({
+    mutationFn: (newPost: any) => {
+      fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        body: JSON.stringify(newPost)
+      }).then(res => {
+        res.json();
+      })
+    }
+  })
 
   if (error) return <div>There was an error</div>
 
@@ -30,7 +32,14 @@ function App() {
 
   return (
     <>
-      <button className="bg-gray-400 px-4 py-2 rounded text-gray-600 cursor-pointer hover:text-gray-900">Add Post</button>
+      <button className="bg-gray-400 px-4 py-2 rounded text-gray-600 cursor-pointer hover:text-gray-900" onClick={() =>
+        mutate({
+          "userId": 200,
+          "id": 100,
+          "title": "Hey! my name is Okedo and this is my channel",
+          "body": "This is the body of this post"
+        })
+      }>Add Post</button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data.map((todo: any) => (
           <div className="bg-gray-400 rounded-2xl p-2 m-3" key={todo.id}>
