@@ -16,13 +16,19 @@ function App() {
   })
 
   const { mutate } = useMutation({
-    mutationFn: (newPost: any) => {
-      fetch("https://jsonplaceholder.typicode.com/posts", {
+    mutationFn: async (newPost: any) => {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "POST",
-        body: JSON.stringify(newPost)
-      }).then(res => {
-        return res.json();
+        body: JSON.stringify(newPost),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
+      if (!res.ok) {
+        throw new Error('Failed to create post');
+      }
+
+      return res.json();
     }
   })
 
