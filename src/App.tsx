@@ -21,7 +21,7 @@ function App() {
         method: "POST",
         body: JSON.stringify(newPost)
       }).then(res => {
-        res.json();
+        return res.json();
       })
     }
   })
