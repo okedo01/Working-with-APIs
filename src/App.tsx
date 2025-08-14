@@ -1,5 +1,5 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
 import './App.css'
+import ReactQuery from './ReactQuery'
 
 function App() {
   // const { data, error, isLoading } = useQuery({
@@ -54,6 +54,7 @@ function App() {
             <p className="py-4 text-gray-600">{todo.body}</p>
           </div>
         ))} */}
+        <ReactQuery />
       </div>
     </>
   )
