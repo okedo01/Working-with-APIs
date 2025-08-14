@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { User } from './Type';
+import debounce from 'lodash.debounce';
 import {
     Card,
     CardAction,
@@ -8,12 +9,13 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import { Input } from './components/ui/input';
 
 const SearchField: React.FC = () => {
     const [data, setData] = useState<User[]>([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredData, setFilteredData] = useState<User[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,25 +29,47 @@ const SearchField: React.FC = () => {
             })
             .then(data => {
                 setData(data);
+                setFilteredData(data); // initially all data
                 setLoading(false);
             })
             .catch(err => {
                 setError(err.message);
                 setLoading(false);
-            })
-    }, [])
+            });
+    }, []);
 
-    if (loading) return <div>Loading...</div>
+    // The actual search function
+    const handleSearch = (value: string) => {
+        setSearchTerm(value);
+        if (!value.trim()) {
+            setFilteredData(data);
+            return;
+        }
+        const results = data.filter(item =>
+            item.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredData(results);
+    };
 
-    if (error) return <div>Error: {error}</div>
+    // Debounced version
+    const debouncedSearch = useCallback(
+        debounce((value: string) => {
+            handleSearch(value);
+        }, 500),
+        [data]
+    );
 
-    const filteredData = data.filter((item) => (
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ))
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
-            <Input placeholder="Search..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="mb-5" />
+            <Input
+                placeholder="Search..."
+                defaultValue={searchTerm}
+                onChange={(event) => debouncedSearch(event.target.value)}
+                className="mb-5"
+            />
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
                 {filteredData.map(value => (
                     <Card key={value.id}>
@@ -64,7 +88,7 @@ const SearchField: React.FC = () => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SearchField;
