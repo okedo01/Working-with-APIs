@@ -1,5 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
+import { Button } from './components/ui/button'
 
 const ReactQuery: React.FC = () => {
     const { data, error, isLoading } = useQuery({
@@ -11,7 +12,7 @@ const ReactQuery: React.FC = () => {
         }
     })
 
-    const { mutate } = useMutation({
+    const { mutate, isPending, isError, isSuccess } = useMutation({
         mutationFn: async (newPost: any) => {
             const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
                 method: "POST",
@@ -23,34 +24,38 @@ const ReactQuery: React.FC = () => {
             if (!res.ok) throw new Error("Failed to fetch data");
 
             return res.json();
+        },
+        onSuccess: (newPost) => {
+            QueryClient.setQueryData(["posts"], (oldPost) => [...oldPost, newPost])
         }
     })
 
     if (!data) return <div>No data Found</div>
 
-    if (error) return <div>There is an error</div>
+    if (error || isError) return <div>There is an error</div>
 
     if (isLoading) return <div>Loading...</div>
 
     return (
-        <>
-            <button onClick={() => {
+        <div>
+            {isPending && <div>Data is being Added</div>}
+            <Button className="w-full" onClick={() => {
                 mutate({
                     "userId": 100,
                     "id": 200,
                     "title": "TITLE",
                     "body": "BODY"
                 })
-            }}>Add Post</button >
-            <div>
+            }}>Add Post</Button >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {data.map((todo: any) => (
-                    <div key={todo.id}>
+                    <div key={todo.id} className="bg-gray-400 rounded-2xl p-2 m-3">
                         <h1>ID: {todo.id}</h1>
                         <h3>TITLE: {todo.title}</h3>
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     )
 }
 
