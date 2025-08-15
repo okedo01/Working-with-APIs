@@ -5,8 +5,8 @@ import { Input } from './components/ui/input';
 
 type Posts = {
   title: string,
-  userId: string,
-  Id: string,
+  userId: number,
+  id: number,
   body: string
 }
 
@@ -45,7 +45,7 @@ const CreatePost: React.FC = () => {
     queryFn: getTodos
   })
 
-  const { } = useMutation({
+  const { mutate, isError, isPending } = useMutation({
     mutationFn: fetchTodos
   })
 
@@ -53,15 +53,23 @@ const CreatePost: React.FC = () => {
     return todo.title.toLowerCase().includes(searchTerm.toLowerCase());
   })
 
-  if (error) return <div>Error: {error.message}</div>
+  if (error || isError) return <div>Error: {error?.message}</div>
 
   if (isLoading) return <div>Loading...</div>
 
   return (
     <main>
+      {isPending && <div>Pending...</div>}
       <form onSubmit={handleSubmit}>
         <Input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
-        <Button type='submit' className="mt-4 cursor-pointer">Add Post</Button>
+        <Button type='submit' className="mt-4 cursor-pointer" onClick={() => {
+          mutate({
+            "userId": 2500,
+            "id": 1700,
+            "title": "This is the title",
+            "body": "This is the body"
+          })
+        }}>Add Post</Button>
       </form>
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
