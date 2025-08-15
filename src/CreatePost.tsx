@@ -7,10 +7,6 @@ const CreatePost: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  }
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   }
@@ -35,9 +31,10 @@ const CreatePost: React.FC = () => {
   return (
     <main>
       <form onSubmit={handleSubmit}>
-        <Input type="text" onChange={handleSearchInput} />
-        <Button value="Submit"/>
+        <Input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
+        <Button type='submit' className="mt-4 cursor-pointer">Add Post</Button>
       </form>
+    
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {todos.map((todo: any) => (
           <div key={todo.id} className="bg-gray-400 rounded-2xl p-2 m-3">
