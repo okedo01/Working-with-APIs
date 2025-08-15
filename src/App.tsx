@@ -1,11 +1,11 @@
 import './App.css'
-import ReactQuery from './ReactQuery'
+import CreatePost from './CreatePost'
 
 function App() {
 
   return (
     <>
-        <ReactQuery />
+        <CreatePost />
     </>
   )
 }

@@ -2,14 +2,17 @@ import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Button } from './components/ui/button'
 
+const getData = async() => {
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos")
+    if(!res.ok) throw new Error("Failed to fetch data")
+
+    return res.json();
+}
+
 const ReactQuery: React.FC = () => {
     const { data, error, isLoading } = useQuery({
         queryKey: ["todos"],
-        queryFn: async () => {
-            const res = await fetch("https://jsonplaceholder.typicode.com/todos")
-            if (!res.ok) throw new Error("Failed to fetch data");
-            return res.json();
-        }
+        queryFn: getData,
     })
 
     const { mutate, isPending, isError, isSuccess } = useMutation({
@@ -25,12 +28,12 @@ const ReactQuery: React.FC = () => {
 
             return res.json();
         },
-        onSuccess: (newPost) => {
-            QueryClient.setQueryData(["posts"], (oldPost) => [...oldPost, newPost])
-        }
+        // onSuccess: (newPost) => {
+        //     QueryClient.setQueryData(["posts"], (oldPost) => [...oldPost, newPost])
+        // }
     })
 
-    if (!data) return <div>No data Found</div>
+    if (!data) return <div>{error?.message}</div>
 
     if (error || isError) return <div>There is an error</div>
 
