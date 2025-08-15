@@ -54,19 +54,13 @@ const CreatePost: React.FC = () => {
 
   const { mutate, isError, isPending } = useMutation({
     mutationFn: fetchTodos,
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries({queryKey: ["todos"]}, (oldPost: any) => [...oldPost, newPost])
-    //   console.log("Form submitted Successful")
-    //   setSearchTerm("");
-    // }
-
-     onSuccess: (data, variables) => {
-    // variables here is the `newPost` you sent to mutate()
-    queryClient.setQueryData(["todos"], (oldPosts: Posts[] | undefined) => {
-      return oldPosts ? [...oldPosts, variables] : [variables];
-    });
-    console.log("Form submitted successfully");
-  }
+    onSuccess: (newPost) => {
+      queryClient.setQueryData<Posts[]>(["todos"], (oldPost: any) => {
+        return oldPost ? [...oldPost, newPost] : [newPost]
+      })
+      console.log("Form submitted Successful")
+      setSearchTerm("");
+    }
   })
 
   const filterTodos = todos?.filter((todo: any) => {
