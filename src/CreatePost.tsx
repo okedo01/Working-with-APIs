@@ -1,9 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 
 type Posts = {
+  id: number,
   title: string,
   body: string
 }
@@ -14,6 +15,12 @@ const CreatePost: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    mutate({
+      id: Math.floor(Math.random() * 1000),
+      title: searchTerm,
+      body: "This is body",
+    })
+    setSearchTerm("");
   }
 
   const getTodos = async () => {
@@ -40,11 +47,26 @@ const CreatePost: React.FC = () => {
 
   const { data: todos, error, isLoading } = useQuery({
     queryKey: ["todos"],
-    queryFn: getTodos
+    queryFn: getTodos,
   })
 
+  const queryClient = useQueryClient();
+
   const { mutate, isError, isPending } = useMutation({
-    mutationFn: fetchTodos
+    mutationFn: fetchTodos,
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries({queryKey: ["todos"]}, (oldPost: any) => [...oldPost, newPost])
+    //   console.log("Form submitted Successful")
+    //   setSearchTerm("");
+    // }
+
+     onSuccess: (data, variables) => {
+    // variables here is the `newPost` you sent to mutate()
+    queryClient.setQueryData(["todos"], (oldPosts: Posts[] | undefined) => {
+      return oldPosts ? [...oldPosts, variables] : [variables];
+    });
+    console.log("Form submitted successfully");
+  }
   })
 
   const filterTodos = todos?.filter((todo: any) => {
@@ -60,12 +82,7 @@ const CreatePost: React.FC = () => {
       {isPending && <div>Pending...</div>}
       <form onSubmit={handleSubmit}>
         <Input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
-        <Button type='submit' className="mt-4 cursor-pointer" onClick={() => {
-          mutate({
-            title: searchTerm,
-            body: "This is body",
-          })
-        }}>Add Post</Button>
+        <Button type='submit' className="mt-4 cursor-pointer" >Add Post</Button>
       </form>
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
