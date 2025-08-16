@@ -62,9 +62,9 @@ const CreatePost: React.FC = () => {
     //   setSearchTerm("");
     // }
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["todos"]})
-    }
+   onSuccess: (newPost) => {
+    queryClient.invalidateQueries({queryKey: ["posts"]})
+   }
   })
 
   const filterTodos = todos?.filter((todo: any) => {
